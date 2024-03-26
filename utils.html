@@ -1,0 +1,98 @@
+<h1>Versionamento e Deploy de Aplicações Flask</h1>
+<h2>Introdução</h2>
+<p>Este ebook aborda o processo de versionamento e deploy de aplicações Python Flask. Primeiramente, serão explicados conceitos importantes como versionamento de código com Git e GitHub e deploy em servidores web.</p>
+<p>Em seguida, será detalhado passo a passo como versionar uma aplicação Flask e enviá-la para repositório GitHub. Por fim, serão abordadas as etapas necessárias para colocar a aplicação em produção utilizando o serviço Render.</p>
+<h2>Conceitos Importantes</h2>
+<p>Antes de entrarmos nos detalhes de versionamento e deploy, é importante entender alguns conceitos:</p>
+<h3>Versionamento de Código</h3>
+<p>
+    Versionamento de código é o processo de controlar diferentes versões do código-fonte de um software ao longo do tempo. Isso permite desenvolvedores salvarem snapshots do código, voltarem a versões anteriores se necessário e trabalharem
+    de forma colaborativa sem sobrescrever alterações uns dos outros.
+</p>
+<p>
+    As ferramentas mais populares de versionamento são Git e GitHub. O <strong>Git</strong> é um sistema de controle de versão distribuído que permite versionar localmente projetos na máquina de cada desenvolvedor. Já o
+    <strong>GitHub</strong> é uma plataforma online que hospeda repositórios Git, permitindo colaboração e integração contínua de projetos.
+</p>
+<h3>Deploy</h3>
+<p>
+    Deploy ou implantação é o processo de instalar uma aplicação em um ambiente de produção. Isso envolve mover o código do ambiente de desenvolvimento para servidores web remotos que irão hospedar e executar a aplicação para que usuários
+    finais possam acessá-la.
+</p>
+<p>
+    Existem vários serviços de deploy como Heroku, AWS, Azure e Render que automatizam e facilitam esse processo. Eles abstraem toda complexidade de provisionamento e configuração de servidores. Basta enviar o código que eles cuidam do
+    resto.
+</p>
+<h2>Versionando Aplicação Flask</h2>
+<p>Agora que entendemos alguns conceitos importantes, vamos partir para a prática versionando uma aplicação Flask. Os passos são:</p>
+<h3>1. Inicializar repositório Git</h3>
+<p>O primeiro passo é inicializar um repositório Git localmente para versionar a aplicação Flask antes de enviá-la ao GitHub. Isso é feito com o comando <code>git init</code>:</p>
+<pre><code>git init</code></pre>
+<p>Isso criará uma pasta oculta <code>.git</code> com todos arquivos de controle de versão do Git.</p>
+<h3>2. Criar arquivo .gitignore</h3>
+<p>
+    Em seguida, devemos criar um arquivo chamado <code>.gitignore</code> para informar quais arquivos e pastas não devem ser versionados. No caso de aplicações Python, não queremos versionar a pasta <code>venv</code> com as dependências e
+    bibliotecas:
+</p>
+<pre><code>.vnv/.vnv/*/</code></pre>
+<p>Isso fará o Git ignorar essa pasta e seus arquivos. As dependências serão instaladas automaticamente no servidor de deploy.</p>
+<h3>3. Salvar alterações</h3>
+<p>Agora precisamos salvar essas alterações inicializando nosso primeiro commit com Git:</p>
+<pre><code>git add .git commit -m &quot;Configuração inicial&quot; </code></pre>
+<p>O <code>git add</code> adiciona arquivos para serem commitados e o <code>git commit</code> salva um snapshot do projeto com a mensagem &quot;Configuração inicial&quot;.</p>
+<h3>4. Criar repositório no GitHub</h3>
+<p>Com o projeto versionado localmente, podemos enviá-lo para um repositório remoto. Primeiro, devemos criar esse repositório no GitHub. Basta ir em seu perfil, clicar em Repositórios &gt; Novo e dar um nome, como &quot;app-flask&quot;.</p>
+<p>Em seguida, o GitHub mostrará os comandos necessários para vincular seu repositório local ao remoto e fazer push das alterações.</p>
+<h3>5. Vincular repositório local ao GitHub</h3>
+<p>Os comandos que o GitHub apresenta são:</p>
+<pre><code>git remote add origin https://github.com/user/app-flask.gitgit branch -M maingit push -u origin main</code></pre>
+<p>
+    O primeiro vincula seu diretório local ao repositório remoto utilizando &quot;origin&quot; como apelido. O segundo garante que esteja na branch principal &quot;main&quot;. E o último envia suas alterações locais para o repositório
+    GitHub remoto.
+</p>
+<h3>6. Enviar alterações futuras</h3>
+<p>Uma vez vinculado ao repositório GitHub, qualquer alteração futura é só commitar e fazer push:</p>
+<pre><code>git add . git commit -m &quot;Nova funcionalidade&quot;git push origin main</code></pre>
+<p>E seu código será versionado remotamente!</p>
+<h2>Preparando Deploy</h2>
+<p>Agora que versionamos nosso código no GitHub, precisamos prepará-lo para ser instalado no servidor de deploy. Isso envolve 2 etapas:</p>
+<h3>1. Instalar Gunicorn</h3>
+<p>O <strong>Gunicorn</strong> é um servidor HTTP Python WSGI muito popular para servir aplicações Flask em produção. Ele é mais rápido e eficiente que o servidor embutido do Flask.</p>
+<p>Para instalá-lo, basta rodar:</p>
+<pre><code>pip install gunicorn</code></pre>
+<p>Certifique-se de commitar a alteração no requirements.txt também!</p>
+<h3>2. Criar arquivo Procfile</h3>
+<p>Além disso, serviços de deploy como o Render esperam um arquivo chamado <code>Procfile</code> na raiz do projeto para saber como iniciar a aplicação.</p>
+<p>Esse arquivo deve conter uma única linha indicando que usaremos o Gunicorn para rodar nosso aplicativo Flask:</p>
+<pre><code>web: gunicorn app:app</code></pre>
+<p>Onde &quot;app:app&quot; indica o nome do módulo e objeto Flask a ser executado.</p>
+<p>Com Gunicorn instalado e Procfile configurado, nosso app está pronto para deploy!</p>
+<h2>Fazendo Deploy no Render</h2>
+<p>Agora chegou a hora de colocar nossa aplicação Flask no ar com o Render. O Render é um serviço de deploy e hospedagem Heroku-like muito simples de usar.</p>
+<p>Os passos para deploy são:</p>
+<h3>1. Conectar com GitHub</h3>
+<p>Primeiro, devemos conectar nossa conta do Render com o repositório GitHub da aplicação. Basta ir em &quot;New +&quot;&gt;&quot;Import from GitHub&quot; e selecionar o repositório desejado.</p>
+<p>Isso permite que o Render tenha acesso ao nosso código.</p>
+<h3>2. Configurar</h3>
+<p>Em seguida, algumas configurações são necessárias:</p>
+<ul>
+    <li>
+        <p><strong>Escolher stack</strong>: Como estamos deployando uma app Flask, selecionamos a stack &quot;Python&quot;. Isso garantirá que o ambiente certo será provisionado.</p>
+    </li>
+    <li>
+        <p><strong>Configurar comandos</strong>: Precisamos informar os comandos que instalam as dependências e iniciam o aplicativo. Serão:</p>
+    </li>
+</ul>
+<pre><code>pip3 install -r requirements.txtweb: gunicorn app:app</code></pre>
+<p>O primeiro comando instalará todas bibliotecas listadas no requirements.txt que criamos anteriormente. E o segundo inicia o Gunicorn.</p>
+<ul>
+    <li><strong>Variáveis de ambiente</strong>: Também podemos configurar variáveis de ambiente nesta etapa se necessário.</li>
+</ul>
+<h3>3. Fazer Deploy</h3>
+<p>Agora é só clicar em &quot;Deploy&quot;! O Render irá processar nosso repositório GitHub, provisionar um ambiente Python com tudo que precisamos, instalar as bibliotecas, e iniciar nosso aplicativo Flask com Gunicorn.</p>
+<p>Em poucos minutos teremos nossa aplicação Python no ar, acessível publicamente com URLs bonitas!</p>
+<h2>Conclusão</h2>
+<p>E assim concluímos nosso processo completo de preparar uma aplicação Flask para produção. Aprendemos como versionar localmente com Git, enviar para repositório remoto no GitHub, e fazer deploy automatizado no Render.</p>
+<p>
+    Esse fluxo de desenvolvimento moderno ajuda times de desenvolvimento a trabalharem mais rapidamente e implantarem aplicações de forma consistente e confiável. Esperamos que este guia tenha sido útil para aprender os principais conceitos
+    e etapas envolvidos!
+</p>
