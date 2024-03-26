@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block conteudo %}
+    <h2 class="text-center">Cadastrar livro</h2>
+    <hr>
+    <br><br>
+    <form action="{{url_for('adiciona_livro')}}" class="form-group" method="POST">
+        <label for="">Nome</label>
+        <input class="form-control" type="text" name="nome" id="" placeholder="Nome do livro" required>
+        <label for="">Descrição</label>
+        <input class="form-control" type="text" name="descricao" id="" placeholder="Descrição do livro" required>
+        <label for="">Valor</label>
+        <input class="form-control" type="text" name="valor" id="" placeholder="Valor do livro" required>
+        <button class="btn btn-success">Adicionar</button>
+    </form>
+
+{% endblock conteudo %}
+{% set active_page = 'add_livro' %}
